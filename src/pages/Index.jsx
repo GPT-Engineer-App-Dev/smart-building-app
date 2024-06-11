@@ -1,19 +1,47 @@
-// Update this page (the content is just a fallback if you fail and example)
-// Use chakra-ui
-import { Container, Text, VStack } from "@chakra-ui/react";
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 
-// Example of using react-icons
-// import { FaRocket } from "react-icons/fa";
-// <IconButton aria-label="Add" icon={<FaRocket />} size="lg" />; // IconButton would also have to be imported from chakra
+const BuildingMarkers = () => {
+  const map = useMapEvents({
+    click: () => {
+      // Logic to display sensor data card
+    },
+  });
+
+  const buildings = [
+    // Array of 10 building objects with 'id', 'name', 'position', and 'sensorData'
+    // Use random positions within Oslo's latitude and longitude range
+  ];
+
+  return (
+    <>
+      {buildings.map(building => (
+        <Marker
+          key={building.id}
+          position={building.position}
+          icon={new L.Icon({
+            iconUrl: 'path/to/pin-icon.png', // Replace with the actual path to the pin icon
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+          })}
+        >
+          <Popup>{building.sensorData}</Popup>
+        </Marker>
+      ))}
+    </>
+  );
+};
 
 const Index = () => {
   return (
-    <Container centerContent maxW="container.md" height="100vh" display="flex" flexDirection="column" justifyContent="center" alignItems="center">
-      <VStack spacing={4}>
-        <Text fontSize="2xl">Your Blank Canvas</Text>
-        <Text>Chat with the agent to start making edits.</Text>
-      </VStack>
-    </Container>
+    <MapContainer center={[59.9139, 10.7522]} zoom={13} style={{ height: '100vh', width: '100%' }}>
+      <TileLayer
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      />
+      <BuildingMarkers />
+    </MapContainer>
   );
 };
 
